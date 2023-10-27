@@ -3,6 +3,7 @@ import { PhoneBookForm } from './PhoneBookForm/PhoneBookForm';
 import { nanoid } from 'nanoid';
 import Contacts from './Contacts/Contacts';
 import Filter from './Filter/Filter';
+import { Title } from './App.styled';
 
 class App extends Component {
   state = {
@@ -14,6 +15,50 @@ class App extends Component {
     ],
     filter: '',
   };
+  
+  onFormSubmit = newContact => {
+    this.setState(prevState => ({
+      contacts: [...prevState.contacts, { ...newContact, id: nanoid() }],
+    }));
+  };
+
+  onDeleteContact = contactId => {
+    const updatedContacts = this.state.contacts.filter(
+      ({ id }) => id !== contactId
+    );
+    this.setState(() => ({
+      contacts: updatedContacts,
+    }));
+  };
+
+  onFilterInput = value => {
+    this.setState(() => ({
+      filter: `${value.toLowerCase().trim()}`,
+    }));
+  };
+
+  filterVisibleContacts = () => {
+    return this.state.contacts.filter(contact => {
+      return contact.name.toLowerCase().includes(this.state.filter);
+    });
+  };
+
+  render() {
+    const visibleContacts = this.filterVisibleContacts();
+    return (
+      <div>
+        <Title>Phonebook</Title>
+        <PhoneBookForm
+          onAddContact={this.onFormSubmit}
+          contacts={this.state.contacts}
+        />
+        <Filter onChange={this.onFilterInput} />
+        <Title>Contacts</Title>
+        <Contacts contacts={visibleContacts} onDelete={this.onDeleteContact} />
+      </div>
+    );
+  }
 }
 
-export default App;
+
+export default {App}
