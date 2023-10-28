@@ -15,7 +15,7 @@ class App extends Component {
     ],
     filter: '',
   };
-  
+
   onFormSubmit = newContact => {
     this.setState(prevState => ({
       contacts: [...prevState.contacts, { ...newContact, id: nanoid() }],
@@ -59,6 +59,4 @@ class App extends Component {
     );
   }
 }
-
-
-export default App
+export default App;
