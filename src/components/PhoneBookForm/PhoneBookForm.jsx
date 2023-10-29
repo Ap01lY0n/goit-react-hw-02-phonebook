@@ -20,7 +20,7 @@ export const PhoneBookForm = ({ onAddContact, contacts }) => {
       }}
       validationSchema={PhoneBookSchema}
       onSubmit={(value, helper) => {
-        if (contacts.map(({ name }) => name).includes(value.name)) {
+        if (contacts.find(value.name)) {
           return Notiflix.Notify.failure(
             `${value.name} is already in contacts.`
           );

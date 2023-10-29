@@ -50,7 +50,6 @@ class App extends Component {
         <Title>Phonebook</Title>
         <PhoneBookForm
           onAddContact={this.onFormSubmit}
-          contacts={this.state.contacts}
         />
         <Filter onChange={this.onFilterInput} />
         <Title>Contacts</Title>
