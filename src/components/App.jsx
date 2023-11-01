@@ -17,18 +17,28 @@ class App extends Component {
   };
 
   onFormSubmit = newContact => {
+    const hasContact = this.state.contacts.some(
+      ({ name }) => name.toLowerCase() === newContact.name.toLowerCase()
+    );
+
+    if (hasContact) {
+      alert(`${newContact.name} is already in contacts`);
+      return;
+    }
+
     this.setState(prevState => ({
       contacts: [...prevState.contacts, { ...newContact, id: nanoid() }],
     }));
   };
 
   onDeleteContact = contactId => {
-    const updatedContacts = this.state.contacts.filter(
-      ({ id }) => id !== contactId
-    );
-    this.setState(() => ({
-      contacts: updatedContacts,
-    }));
+    this.setState(prevState => {
+      return {
+        contacts: prevState.contacts.filter(
+          contact => contact.id !== contactId
+        ),
+      };
+    });
   };
 
   onFilterInput = value => {

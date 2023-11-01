@@ -14,26 +14,23 @@ const PhoneBookSchema = Yup.object().shape({
 export const PhoneBookForm = ({ onAddContact, contacts }) => {
   return (
     <Formik
-      initialValues={{
-        name: '',
-        number: '',
-      }}
-      validationSchema={PhoneBookSchema}
-      onSubmit={(value, helper) => {
-        if (contacts.find(value.name)) {
-          return Notiflix.Notify.failure(
-            `${value.name} is already in contacts.`
-          );
-        } else if (
-          contacts.map(({ number }) => number).includes(value.number)
-        ) {
-          return Notiflix.Notify.failure(
-            ` ${value.name} is already in contacts.`
-          );
-        }
-        onAddContact(value);
-        helper.resetForm();
-      }}
+    initialValues={{
+      name: '',
+      number: '',
+    }}
+    validationSchema={PhoneBookSchema}
+    onSubmit={(value, helper) => {
+      const contactByName = contacts.find(contact => contact.name === value.name);
+      if (contactByName) {
+        return Notiflix.Notify.failure(`${value.name} is already in contacts.`);
+      }
+      const contactByNumber = contacts.find(contact => contact.number === value.number);
+      if (contactByNumber) {
+        return Notiflix.Notify.failure(`${value.number} is already in contacts.`);
+      }
+      onAddContact(value);
+      helper.resetForm();
+    }}
     >
       <ContactsBookForm>
         <label>
@@ -43,7 +40,7 @@ export const PhoneBookForm = ({ onAddContact, contacts }) => {
         </label>
 
         <label>
-          <Text> Number:</Text>
+          <Text>Number:</Text>
           <ContactsBookInput
             type="text"
             name="number"
