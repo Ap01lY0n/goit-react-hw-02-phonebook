@@ -20,17 +20,26 @@ class App extends Component {
     const hasContact = this.state.contacts.some(
       ({ name }) => name.toLowerCase() === newContact.name.toLowerCase()
     );
-
+  
+    const isNumberExists = this.state.contacts.some(
+      ({ number }) => number === newContact.number
+    );
+  
     if (hasContact) {
-      alert(`${newContact.name} is already in contacts`);
+      alert(`${newContact.name} is already in contacts.`);
       return;
     }
-
+  
+    if (isNumberExists) {
+      alert(`${newContact.number} is already in contacts.`);
+      return;
+    }
+  
     this.setState(prevState => ({
       contacts: [...prevState.contacts, { ...newContact, id: nanoid() }],
     }));
   };
-
+  
   onDeleteContact = contactId => {
     this.setState(prevState => {
       return {

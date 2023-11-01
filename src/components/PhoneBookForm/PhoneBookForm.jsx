@@ -1,7 +1,12 @@
 import { Formik } from 'formik';
-import Notiflix from 'notiflix';
 import * as Yup from 'yup';
-import {ContactsBookForm, Text, ContactsBookInput, SubmitBtn, ValidationError} from './PhoneBookForm.styled';
+import {
+  ContactsBookForm,
+  Text,
+  ContactsBookInput,
+  SubmitBtn,
+  ValidationError,
+} from './PhoneBookForm.styled';
 
 const PhoneBookSchema = Yup.object().shape({
   name: Yup.string().min(3, 'To short!').required('This field is required!'),
@@ -11,26 +16,23 @@ const PhoneBookSchema = Yup.object().shape({
     .required('This field is required!'),
 });
 
-export const PhoneBookForm = ({ onAddContact, contacts }) => {
+export const PhoneBookForm = ({ onAddContact }) => {
   return (
     <Formik
-    initialValues={{
-      name: '',
-      number: '',
-    }}
-    validationSchema={PhoneBookSchema}
-    onSubmit={(value, helper) => {
-      const contactByName = contacts.find(contact => contact.name === value.name);
-      if (contactByName) {
-        return Notiflix.Notify.failure(`${value.name} is already in contacts.`);
-      }
-      const contactByNumber = contacts.find(contact => contact.number === value.number);
-      if (contactByNumber) {
-        return Notiflix.Notify.failure(`${value.number} is already in contacts.`);
-      }
-      onAddContact(value);
-      helper.resetForm();
-    }}
+      initialValues={{
+        name: '',
+        number: '',
+      }}
+      validationSchema={PhoneBookSchema}
+      onSubmit={(value, helper) => {
+        onAddContact(value);
+        helper.resetForm({
+          values: {
+            name: '',
+            number: '',
+          },
+        });
+      }}
     >
       <ContactsBookForm>
         <label>
